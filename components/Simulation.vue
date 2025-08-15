@@ -14,8 +14,8 @@
 
     <div class="mt-4">
       <p><strong>RTP:</strong> {{ gameStore.getRTP().toFixed(2) }}%</p>
-      <p><strong>Общая сумма ставок:</strong> {{ gameStore.allUserBets }}</p>
-      <p><strong>Общая сумма выигрышей:</strong> {{ gameStore.allUserWins }}</p>
+      <p><strong>Bet Sum:</strong> {{ gameStore.allUserBets }}</p>
+      <p><strong>Win Sum:</strong> {{ gameStore.allUserWins }}</p>
     </div>
   </div>
 </template>
