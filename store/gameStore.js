@@ -11,19 +11,19 @@ export const useGameStore = defineStore('game', () => {
   const balance = ref(100)
   const history = ref([])
 
-  const allUserWins = ref(0) // количество побед
-  const allUserBets = ref(0) // сумма всех ставок
+  const allUserWins = ref(0) // общая сумма выигрышей
+  const allUserBets = ref(0) // общая сумма ставок
 
   const WIN_MULTIPLIERS = {
-    [Constants.coefPair]: 2,
-    [Constants.coefFullHouse]: 3,
-    [Constants.coefBalut]: 4,
-    [Constants.coefStraight]: 5,
+    [Constants.coefPair]: 2.1,
+    [Constants.coefFullHouse]: 3.4,
+    [Constants.coefBalut]: 4.5,
+    [Constants.coefStraight]: 5.2,
     [Constants.coefOther]: 0
   }
 
   const getDices = () =>
-    dices.value = Array.from({ length: 5 }, () => Math.floor(Math.random() * 6) + 1)
+    Array.from({ length: 5 }, () => Math.floor(Math.random() * 6) + 1)
 
   const setBalance = (num) => balance.value += num
 
@@ -47,7 +47,7 @@ export const useGameStore = defineStore('game', () => {
     const multiplier = WIN_MULTIPLIERS[currentCombo.value] || 0
     const win = bet * multiplier
     setBalance(win)
-    return { combo: currentCombo.value, win: win - bet }
+    return { combo: currentCombo.value, win }
   }
 
   const rollDices = async (bet) => {
@@ -59,15 +59,9 @@ export const useGameStore = defineStore('game', () => {
     const currentResult = getDices()
     const { combo, win } = calculateRoll(currentResult, bet)
 
-    // сумма всех ставок
     allUserBets.value += bet
+    allUserWins.value += win
 
-    // количество побед
-    if (win > 0) {
-      allUserWins.value += 1
-    }
-
-    // добавляем в историю
     history.value.push({
       results: currentResult,
       bet,
@@ -78,9 +72,28 @@ export const useGameStore = defineStore('game', () => {
     isDiceRolling.value = false
   }
 
+  const simulateRolls = (count = 10000, bet = 10) => {
+    if (count <= 0) return
+
+    for (let i = 0; i < count; i++) {
+      const currentResult = getDices()
+      const { combo, win } = calculateRoll(currentResult, bet)
+      balance.value -= bet
+      allUserBets.value += bet
+      allUserWins.value += win
+
+      history.value.push({
+        results: currentResult,
+        bet,
+        win,
+        combo
+      })
+    }
+  }
+
   const getRTP = () => {
-    if (history.value.length === 0) return 0
-    return (allUserWins.value / history.value.length) * 100
+    if (allUserBets.value === 0) return 0
+    return (allUserWins.value / allUserBets.value) * 100
   }
 
   return {
@@ -92,6 +105,7 @@ export const useGameStore = defineStore('game', () => {
     rollDices,
     getRTP,
     allUserWins,
-    allUserBets
+    allUserBets,
+    simulateRolls
   }
 })

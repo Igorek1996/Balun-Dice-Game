@@ -46,18 +46,25 @@
         <h2 class="text-lg font-semibold mb-2">Your balance</h2>
         <div class="text-xl font-bold text-green-600">{{ gameStore.balance }}</div>
       </div>
+
+      <Simulation />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import { useConstants } from '#imports'
 import { useGameStore } from '~/store/gameStore'
+import Simulation from './Simulation.vue'
 
 const gameStore = useGameStore()
 const Constants = useConstants()
 const bet = ref(10)
+
+const simulate = () => {
+  gameStore.simulateRolls(10000, 1) // 10к игр по 1 монете
+}
+
 
 const combos = [
   { title: 'Pair', x: 'x2', value: Constants.coefPair },

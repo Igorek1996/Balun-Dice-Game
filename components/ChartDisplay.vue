@@ -37,7 +37,7 @@ onMounted(() => {
         {
           label: 'Win Amount',
           data: gameStore.history.map(item => item.win),
-          backgroundColor: 'rgba(34,197,94,0.2)', // Tailwind green-500 20%
+          backgroundColor: 'rgba(34,197,94,0.2)',
           borderColor: 'rgba(34,197,94,1)',
           borderWidth: 2,
           tension: 0.3,
@@ -88,9 +88,7 @@ watch(() => gameStore.history.length, () => {
 
 <style scoped>
 canvas {
-  /* чтобы canvas занимал всю ширину и высоту контейнера */
   width: 100% !important;
   height: 16rem !important;
-  /* Tailwind h-64 */
 }
 </style>
