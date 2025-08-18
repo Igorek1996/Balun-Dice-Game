@@ -22,8 +22,15 @@ export const useGameStore = defineStore('game', () => {
     [Constants.coefOther]: 0
   }
 
-  const getDices = () =>
-    Array.from({ length: 5 }, () => Math.floor(Math.random() * 6) + 1)
+  const generateDices = () => {
+    return Array.from({ length: 5 }, () => Math.floor(Math.random() * 6) + 1)
+  }
+
+  // Бросок в реальной игре — обновляет dices.value
+  const getDices = () => {
+    dices.value = generateDices()
+    return dices.value
+  }
 
   const setBalance = (num) => balance.value += num
 
@@ -45,7 +52,7 @@ export const useGameStore = defineStore('game', () => {
   const calculateRoll = (arr, bet) => {
     currentCombo.value = getCombo(arr)
     const multiplier = WIN_MULTIPLIERS[currentCombo.value] || 0
-    const win = bet * multiplier
+    const win = (bet * multiplier) - bet
     setBalance(win)
     return { combo: currentCombo.value, win }
   }
@@ -73,15 +80,16 @@ export const useGameStore = defineStore('game', () => {
     isDiceRolling.value = false
   }
 
-  const simulateRolls = (count = 10000, bet = 10) => {
-    if (count <= 0) return
+  const simulateRolls = (count = 10000, bet = 1) => {
+    let totalBets = 0
+    let totalWins = 0
 
     for (let i = 0; i < count; i++) {
-      const currentResult = getDices()
+      const currentResult = generateDices()
       const { combo, win } = calculateRoll(currentResult, bet)
-      balance.value -= bet
-      allUserBets.value += bet
-      allUserWins.value += win
+
+      totalBets += bet
+      totalWins += win
 
       history.value.push({
         results: currentResult,
@@ -90,7 +98,12 @@ export const useGameStore = defineStore('game', () => {
         combo
       })
     }
+
+    // Обновляем суммарные данные
+    allUserBets.value += totalBets
+    allUserWins.value += totalWins
   }
+
 
   const getRTP = () => {
     if (allUserBets.value === 0) return 0

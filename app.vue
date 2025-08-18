@@ -28,5 +28,5 @@
 
 <script setup>
 const tabs = ['Chart', 'Result']
-const activeTab = ref('Chart')
+const activeTab = ref('Result')
 </script>
