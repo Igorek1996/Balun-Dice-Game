@@ -15,10 +15,10 @@ export const useGameStore = defineStore('game', () => {
   const allUserBets = ref(0) // общая сумма ставок
 
   const WIN_MULTIPLIERS = {
-    [Constants.coefPair]: 2,
-    [Constants.coefFullHouse]: 3,
-    [Constants.coefBalut]: 4,
-    [Constants.coefStraight]: 5,
+    [Constants.coefPair]: 1.94,
+    [Constants.coefFullHouse]: 2.94,
+    [Constants.coefBalut]: 3.95,
+    [Constants.coefStraight]: 4.95,
     [Constants.coefOther]: 0
   }
 
@@ -80,7 +80,7 @@ export const useGameStore = defineStore('game', () => {
     isDiceRolling.value = false
   }
 
-  const simulateRolls = (count = 10000, bet = 1) => {
+  const simulateRolls = (count = 10000, bet = 10) => {
     let totalBets = 0
     let totalWins = 0
 
