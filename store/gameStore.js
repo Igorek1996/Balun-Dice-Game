@@ -15,10 +15,10 @@ export const useGameStore = defineStore('game', () => {
   const allUserBets = ref(0) // общая сумма ставок
 
   const WIN_MULTIPLIERS = {
-    [Constants.coefPair]: 2.1,
-    [Constants.coefFullHouse]: 3.4,
-    [Constants.coefBalut]: 4.5,
-    [Constants.coefStraight]: 5.2,
+    [Constants.coefPair]: 2,
+    [Constants.coefFullHouse]: 3,
+    [Constants.coefBalut]: 4,
+    [Constants.coefStraight]: 5,
     [Constants.coefOther]: 0
   }
 
@@ -61,6 +61,7 @@ export const useGameStore = defineStore('game', () => {
 
     allUserBets.value += bet
     allUserWins.value += win
+    console.log(win);
 
     history.value.push({
       results: currentResult,
